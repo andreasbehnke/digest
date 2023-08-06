@@ -23,7 +23,7 @@ class WordSequenceTest {
     @Test
     void testSubSequence() {
         List<String> words = WordSequence.create("This\n is a small \t\n\t    test")
-                .subSequence(2,3).getWords();
+                .subSequence(2,5).getWords();
         assertEquals(3, words.size());
         assertEquals("a", words.get(0));
         assertEquals("small", words.get(1));

@@ -34,8 +34,12 @@ public class WordSequence {
         return words;
     }
 
-    public WordSequence subSequence(int fromIndex, int length) {
-        return new WordSequence(words.subList(fromIndex, fromIndex + length));
+    public int size() {
+        return words.size();
+    }
+
+    public WordSequence subSequence(int fromIndex, int toIndex) {
+        return new WordSequence(words.subList(fromIndex, toIndex));
     }
 
     @Override

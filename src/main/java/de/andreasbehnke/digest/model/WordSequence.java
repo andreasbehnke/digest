@@ -3,6 +3,7 @@ package de.andreasbehnke.digest.model;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ public class WordSequence {
         if (words == null || words.isEmpty()) {
             throw new RuntimeException("list of words must not be null or empty");
         }
-        this.words = words;
+        this.words = Collections.unmodifiableList(words);
     }
 
     public static WordSequence create(String inputText) {

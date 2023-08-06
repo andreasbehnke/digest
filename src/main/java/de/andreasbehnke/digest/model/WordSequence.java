@@ -2,10 +2,7 @@ package de.andreasbehnke.digest.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -14,6 +11,8 @@ import java.util.stream.Collectors;
 public class WordSequence {
 
     private final List<String> words;
+
+    private Set<WordSequence> subSequences;
 
     private WordSequence(List<String> words) {
         if (words == null || words.isEmpty()) {
@@ -41,6 +40,34 @@ public class WordSequence {
 
     public WordSequence subSequence(int fromIndex, int toIndex) {
         return new WordSequence(words.subList(fromIndex, toIndex));
+    }
+
+    /**
+     * @return Set containing all sub-sequences of this sequence. If this sequence is
+     * abc def ghi jkl
+     * than the set of all sub-sequences would be
+     * abc
+     * abc def
+     * abc def ghi
+     * abc def ghi jkl
+     * def
+     * def ghi
+     * def ghi jkl
+     * ghi
+     * ghi jkl
+     * jkl
+     */
+    public Set<WordSequence> allSubSequences() {
+        if (subSequences == null) {
+            Set<WordSequence> sequences = new HashSet<>();
+            for(int start = 0; start < words.size(); start++) {
+                for (int subStart = start; subStart < words.size(); subStart++) {
+                    sequences.add(subSequence(start, subStart + 1));
+                }
+            }
+            this.subSequences = Collections.unmodifiableSet(sequences);
+        }
+        return subSequences;
     }
 
     @Override

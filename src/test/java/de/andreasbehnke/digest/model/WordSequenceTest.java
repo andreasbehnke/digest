@@ -3,8 +3,10 @@ package de.andreasbehnke.digest.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WordSequenceTest {
 
@@ -28,5 +30,22 @@ class WordSequenceTest {
         assertEquals("a", words.get(0));
         assertEquals("small", words.get(1));
         assertEquals("test", words.get(2));
+    }
+
+    @Test
+    void testAllSubSequences() {
+        WordSequence sequence = WordSequence.create("abc def ghi jkl");
+        Set<WordSequence> subSequences = sequence.allSubSequences();
+        assertEquals(10, subSequences.size());
+        assertTrue(subSequences.contains(WordSequence.create("abc")));
+        assertTrue(subSequences.contains(WordSequence.create("abc def")));
+        assertTrue(subSequences.contains(WordSequence.create("abc def ghi")));
+        assertTrue(subSequences.contains(WordSequence.create("abc def ghi jkl")));
+        assertTrue(subSequences.contains(WordSequence.create("def")));
+        assertTrue(subSequences.contains(WordSequence.create("def ghi")));
+        assertTrue(subSequences.contains(WordSequence.create("def ghi jkl")));
+        assertTrue(subSequences.contains(WordSequence.create("ghi")));
+        assertTrue(subSequences.contains(WordSequence.create("ghi jkl")));
+        assertTrue(subSequences.contains(WordSequence.create("jkl")));
     }
 }

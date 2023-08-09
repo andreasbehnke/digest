@@ -1,6 +1,6 @@
 package de.andreasbehnke.digest;
 
-import de.andreasbehnke.digest.SubSequenceCollector;
+import de.andreasbehnke.digest.model.GroupOfWordSequences;
 import de.andreasbehnke.digest.model.WordSequence;
 import org.junit.jupiter.api.Test;
 
@@ -94,6 +94,42 @@ class SubSequenceCollectorTest {
         assertEquals(WordSequence.create("xyz 123 ghi def abc"), subSequences.get(54));
 
         assertEquals(55, subSequences.size());
+    }
 
+    @Test
+    void testGroupSequences() {
+        // The five example input texts...
+        WordSequence sequence1 = WordSequence.create("abc def ghi jkl xyz");
+        WordSequence sequence2 = WordSequence.create("abc def ghi xyz 123 456");
+        WordSequence sequence3 = WordSequence.create("xyz 123 abc def ghi");
+        WordSequence sequence4 = WordSequence.create("xyz 123 456 abc ghi def");
+        WordSequence sequence5 = WordSequence.create("xyz 123 ghi def abc");
+
+        //... contain this list of prefix groups
+        List<GroupOfWordSequences> groups = new SubSequenceCollector().groupSequences(List.of(sequence1, sequence2, sequence3, sequence4, sequence5));
+        assertEquals(17, groups.size());
+
+        assertEquals(0, groups.get(0).getId());
+        List<WordSequence> subSequences1 = groups.get(0).getSequences();
+        assertEquals(WordSequence.create("123"), subSequences1.get(0));
+        assertEquals(WordSequence.create("123 456"), subSequences1.get(1));
+        assertEquals(WordSequence.create("123 456 abc"), subSequences1.get(2));
+        assertEquals(WordSequence.create("123 456 abc ghi"), subSequences1.get(3));
+        assertEquals(WordSequence.create("123 456 abc ghi def"), subSequences1.get(4));
+        assertEquals(5, subSequences1.size());
+
+        assertEquals(10, groups.get(10).getId());
+        List<WordSequence> subSequences11 = groups.get(10).getSequences();
+        assertEquals(WordSequence.create("ghi"), subSequences11.get(0));
+        assertEquals(WordSequence.create("ghi def"), subSequences11.get(1));
+        assertEquals(WordSequence.create("ghi def abc"), subSequences11.get(2));
+        assertEquals(3, subSequences11.size());
+
+        assertEquals(16, groups.get(16).getId());
+        List<WordSequence> subSequences17 = groups.get(16).getSequences();
+        assertEquals(WordSequence.create("xyz 123 ghi"), subSequences17.get(0));
+        assertEquals(WordSequence.create("xyz 123 ghi def"), subSequences17.get(1));
+        assertEquals(WordSequence.create("xyz 123 ghi def abc"), subSequences17.get(2));
+        assertEquals(3, subSequences17.size());
     }
 }

@@ -15,6 +15,7 @@ public class SubSequenceCollector {
         return sources.stream()
                 .map(WordSequence::allSubSequences)
                 .flatMap(Set::stream)
+                // remove duplicates
                 .distinct()
                 .sorted(new WordSequenceComparator())
                 .collect(Collectors.toList());

@@ -14,6 +14,8 @@ public class WordSequence {
 
     private Set<WordSequence> subSequences;
 
+    private String stringRepresentation;
+
     private WordSequence(List<String> words) {
         if (words == null || words.isEmpty()) {
             throw new RuntimeException("list of words must not be null or empty");
@@ -72,19 +74,21 @@ public class WordSequence {
 
     @Override
     public String toString() {
-        return String.join(" ", words);
+        if (stringRepresentation == null) {
+            stringRepresentation = String.join(" ", words).toLowerCase();
+        }
+        return stringRepresentation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WordSequence sequence = (WordSequence) o;
-        return words.equals(sequence.words);
+        return toString().equals(o.toString());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(words);
+        return Objects.hash(toString());
     }
 }

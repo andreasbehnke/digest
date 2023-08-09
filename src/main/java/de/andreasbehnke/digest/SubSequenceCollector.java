@@ -1,4 +1,7 @@
-package de.andreasbehnke.digest.model;
+package de.andreasbehnke.digest;
+
+import de.andreasbehnke.digest.model.WordSequence;
+import de.andreasbehnke.digest.model.WordSequenceComparator;
 
 import java.util.List;
 import java.util.Set;

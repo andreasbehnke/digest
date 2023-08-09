@@ -1,5 +1,7 @@
-package de.andreasbehnke.digest.model;
+package de.andreasbehnke.digest;
 
+import de.andreasbehnke.digest.SubSequenceCollector;
+import de.andreasbehnke.digest.model.WordSequence;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

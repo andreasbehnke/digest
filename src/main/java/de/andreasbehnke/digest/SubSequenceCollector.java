@@ -9,6 +9,59 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * For a given list of source sequences, all possible series of words are collected.
+ *
+ * Example:
+ *
+ * sources:
+ *
+ *  - abc def ghi
+ *  - 123 456 789
+ *  - def ghi jkl 789
+ *  - abc def xyz
+ *
+ *
+ *  will result in the following groups of series, sorted in lexicographical order:
+ *
+ *  1.)
+ *  123
+ *  123 456
+ *  123 456 789
+ *
+ *  2.)
+ *  456
+ *  456 789
+ *
+ *  3.)
+ *  789
+ *
+ *  4.)
+ *  abc
+ *  abc def
+ *  abc def ghi
+ *
+ *  5.)
+ *  abc def xyz
+ *
+ *  6.)
+ *  def
+ *  def ghi
+ *  def ghi jkl
+ *  def ghi jkl 789
+ *
+ *  7.)
+ *  def xyz
+ *
+ *  8.)
+ *  ghi
+ *  ghi jkl
+ *  ghi jkl 789
+ *
+ *  9.)
+ *  xyz
+ *
+ */
 public class SubSequenceCollector {
 
     List<WordSequence> collectSubSequences(List<WordSequence> sources) {

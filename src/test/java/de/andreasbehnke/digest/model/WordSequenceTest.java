@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WordSequenceTest {
 
@@ -37,15 +36,9 @@ class WordSequenceTest {
     void testAllSubSequences() {
         WordSequence sequence = WordSequence.create("abc def ghi jkl");
         Set<WordSequence> subSequences = sequence.allSubSequences();
-        assertEquals(10, subSequences.size());
-        assertTrue(subSequences.contains(WordSequence.create("abc")));
-        assertTrue(subSequences.contains(WordSequence.create("abc def")));
-        assertTrue(subSequences.contains(WordSequence.create("abc def ghi")));
+        assertEquals(4, subSequences.size());
         assertTrue(subSequences.contains(WordSequence.create("abc def ghi jkl")));
-        assertTrue(subSequences.contains(WordSequence.create("def")));
-        assertTrue(subSequences.contains(WordSequence.create("def ghi")));
         assertTrue(subSequences.contains(WordSequence.create("def ghi jkl")));
-        assertTrue(subSequences.contains(WordSequence.create("ghi")));
         assertTrue(subSequences.contains(WordSequence.create("ghi jkl")));
         assertTrue(subSequences.contains(WordSequence.create("jkl")));
     }
@@ -84,5 +77,17 @@ class WordSequenceTest {
         assertEquals(2, match.getToIndex());
         assertEquals(1, match.getCount());
         assertEquals("ghi", match.getPattern().toString());
+    }
+
+    @Test
+    void testStartsWith() {
+        WordSequence sequence = WordSequence.create("abc def ghi jkl");
+        assertTrue(sequence.startsWith(WordSequence.create("abc")));
+        assertTrue(sequence.startsWith(WordSequence.create("abc def")));
+        assertTrue(sequence.startsWith(WordSequence.create("abc def ghi")));
+        assertFalse(sequence.startsWith(WordSequence.create("def ghi")));
+        assertFalse(sequence.startsWith(WordSequence.create("ghi")));
+        assertFalse(sequence.startsWith(WordSequence.create("abc def ghi jkl 123")));
+        assertFalse(sequence.startsWith(WordSequence.create("999 abc def ghi jkl")));
     }
 }

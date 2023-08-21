@@ -48,14 +48,8 @@ public class WordSequence {
      * @return Set containing all sub-sequences of this sequence. If this sequence is
      * abc def ghi jkl
      * than the set of all sub-sequences would be
-     * abc
-     * abc def
-     * abc def ghi
      * abc def ghi jkl
-     * def
-     * def ghi
      * def ghi jkl
-     * ghi
      * ghi jkl
      * jkl
      */
@@ -63,9 +57,7 @@ public class WordSequence {
         if (subSequences == null) {
             Set<WordSequence> sequences = new HashSet<>();
             for(int start = 0; start < words.size(); start++) {
-                for (int subStart = start; subStart < words.size(); subStart++) {
-                    sequences.add(subSequence(start, subStart + 1));
-                }
+                sequences.add(subSequence(start, size()));
             }
             this.subSequences = Collections.unmodifiableSet(sequences);
         }
@@ -104,6 +96,23 @@ public class WordSequence {
             toIndex = index + fromIndex;
         }
         return Optional.of(new SequenceMatch(pattern.subSequence(0, toIndex - fromIndex + 1), fromIndex, toIndex));
+    }
+
+    /**
+     * @param another sequence which is a prefix of this sequence
+     * @return true, if this sequence has another prefix as prefix
+     */
+    public boolean startsWith(WordSequence another) {
+        if (another.size() > size()) {
+            return false;
+        } else {
+            for (int i = 0; i < another.size(); i++) {
+                if (!words.get(i).equals(another.words.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     @Override

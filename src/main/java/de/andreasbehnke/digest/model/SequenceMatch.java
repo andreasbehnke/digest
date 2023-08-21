@@ -1,7 +1,7 @@
 package de.andreasbehnke.digest.model;
 
 /**
- * Represents a match of a {@link GroupOfWordSequences} within a source {@link WordSequence}.
+ * Represents a match of a {@link WordSequence} pattern within a source {@link WordSequence}.
  */
 public class SequenceMatch {
 

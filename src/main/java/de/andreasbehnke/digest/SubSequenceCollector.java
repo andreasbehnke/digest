@@ -1,6 +1,5 @@
 package de.andreasbehnke.digest;
 
-import de.andreasbehnke.digest.model.GroupOfWordSequences;
 import de.andreasbehnke.digest.model.WordSequence;
 import de.andreasbehnke.digest.model.WordSequenceComparator;
 
@@ -74,23 +73,20 @@ public class SubSequenceCollector {
                 .collect(Collectors.toList());
     }
 
-    public List<GroupOfWordSequences> groupSequences(List<WordSequence> sources) {
-        int groupId = 0;
-        int lastSequenceSize = 0;
+    public List<WordSequence> groupSequences(List<WordSequence> sources) {
+        ArrayList<WordSequence> groups = new ArrayList<>();
         List<WordSequence> sequences = collectSubSequences(sources);
-        List<GroupOfWordSequences> groups = new ArrayList<>();
-        List<WordSequence> groupedSequences = new ArrayList<>();
-        for (WordSequence sequence: sequences) {
-            if (sequence.size() <= lastSequenceSize) {
-                // equal or less size indicates beginning of new prefix group
-                groups.add(new GroupOfWordSequences(groupedSequences, groupId));
-                groupId++;
-                groupedSequences = new ArrayList<>();
+        for (int i = 0; i < sequences.size(); i++) {
+            if (i < sequences.size() - 1) {
+                WordSequence sequence = sequences.get(i);
+                WordSequence nextSequence = sequences.get(i + 1);
+                if (!nextSequence.startsWith(sequence)) {
+                    groups.add(sequence);
+                }
+            } else {
+                groups.add(sequences.get(i));
             }
-            lastSequenceSize = sequence.size();
-            groupedSequences.add(sequence);
         }
-        groups.add(new GroupOfWordSequences(groupedSequences, groupId));
         return groups;
     }
 }

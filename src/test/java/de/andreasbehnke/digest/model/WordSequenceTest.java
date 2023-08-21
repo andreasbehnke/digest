@@ -3,6 +3,7 @@ package de.andreasbehnke.digest.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,5 +48,41 @@ class WordSequenceTest {
         assertTrue(subSequences.contains(WordSequence.create("ghi")));
         assertTrue(subSequences.contains(WordSequence.create("ghi jkl")));
         assertTrue(subSequences.contains(WordSequence.create("jkl")));
+    }
+
+    @Test
+    void testMatch() {
+        WordSequence sequence = WordSequence.create("abc def ghi jkl");
+        assertEquals(Optional.empty(), sequence.match(WordSequence.create("xyz")));
+
+        SequenceMatch match = sequence.match(WordSequence.create("def")).orElseThrow();
+        assertEquals(1, match.getFromIndex());
+        assertEquals(1, match.getToIndex());
+        assertEquals(1, match.getCount());
+        assertEquals("def", match.getPattern().toString());
+
+        match = sequence.match(WordSequence.create("def ghi")).orElseThrow();
+        assertEquals(1, match.getFromIndex());
+        assertEquals(2, match.getToIndex());
+        assertEquals(2, match.getCount());
+        assertEquals("def ghi", match.getPattern().toString());
+
+        match = sequence.match(WordSequence.create("ghi jkl mno")).orElseThrow();
+        assertEquals(2, match.getFromIndex());
+        assertEquals(3, match.getToIndex());
+        assertEquals(2, match.getCount());
+        assertEquals("ghi jkl", match.getPattern().toString());
+
+        match = sequence.match(WordSequence.create("ghi 123")).orElseThrow();
+        assertEquals(2, match.getFromIndex());
+        assertEquals(2, match.getToIndex());
+        assertEquals(1, match.getCount());
+        assertEquals("ghi", match.getPattern().toString());
+
+        match = sequence.match(WordSequence.create("ghi 123 456 789")).orElseThrow();
+        assertEquals(2, match.getFromIndex());
+        assertEquals(2, match.getToIndex());
+        assertEquals(1, match.getCount());
+        assertEquals("ghi", match.getPattern().toString());
     }
 }

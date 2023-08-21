@@ -72,6 +72,40 @@ public class WordSequence {
         return subSequences;
     }
 
+    /**
+     * Searches the given pattern and if part of the pattern is found in this sequence,
+     * returns a {@link SequenceMatch} containing from index and to index of pattern
+     * within this sequence and the sub pattern found.
+     * @param pattern The pattern to search for
+     * @return match found or empty
+     */
+    public Optional<SequenceMatch> match(WordSequence pattern) {
+        int fromIndex = -1;
+        for (int patternWord = 0; patternWord < pattern.size(); patternWord++) {
+            for (int index = 0; index < size(); index++) {
+                if (words.get(index).equals(pattern.getWords().get(patternWord))) {
+                    fromIndex = index;
+                    break;
+                }
+            }
+            if (fromIndex > -1) {
+                break;
+            }
+        }
+        if (fromIndex == -1) {
+            return Optional.empty();
+        }
+        int toIndex = fromIndex;
+        int searchLength = Math.min(size() - fromIndex, pattern.size());
+        for (int index = 0; index < searchLength; index++) {
+            if (!words.get(index + fromIndex).equals(pattern.getWords().get(index))) {
+                break;
+            }
+            toIndex = index + fromIndex;
+        }
+        return Optional.of(new SequenceMatch(pattern.subSequence(0, toIndex - fromIndex + 1), fromIndex, toIndex));
+    }
+
     @Override
     public String toString() {
         if (stringRepresentation == null) {

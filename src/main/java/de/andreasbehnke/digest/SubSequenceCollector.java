@@ -24,37 +24,27 @@ import java.util.stream.Collectors;
  *  will result in the following groups of series, sorted in lexicographical order:
  *
  *  1.)
- *  123
- *  123 456
  *  123 456 789
  *
  *  2.)
- *  456
  *  456 789
  *
  *  3.)
  *  789
  *
  *  4.)
- *  abc
- *  abc def
  *  abc def ghi
  *
  *  5.)
  *  abc def xyz
  *
  *  6.)
- *  def
- *  def ghi
- *  def ghi jkl
  *  def ghi jkl 789
  *
  *  7.)
  *  def xyz
  *
  *  8.)
- *  ghi
- *  ghi jkl
  *  ghi jkl 789
  *
  *  9.)

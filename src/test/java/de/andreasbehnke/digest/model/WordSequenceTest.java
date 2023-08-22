@@ -33,14 +33,19 @@ class WordSequenceTest {
     }
 
     @Test
-    void testAllSubSequences() {
+    void testSuffixes() {
         WordSequence sequence = WordSequence.create("abc def ghi jkl");
-        Set<WordSequence> subSequences = sequence.allSubSequences();
-        assertEquals(4, subSequences.size());
-        assertTrue(subSequences.contains(WordSequence.create("abc def ghi jkl")));
-        assertTrue(subSequences.contains(WordSequence.create("def ghi jkl")));
-        assertTrue(subSequences.contains(WordSequence.create("ghi jkl")));
-        assertTrue(subSequences.contains(WordSequence.create("jkl")));
+        Set<WordSequence> suffixes = sequence.suffixes();
+        assertEquals(4, suffixes.size());
+        assertTrue(suffixes.contains(WordSequence.create("abc def ghi jkl")));
+        assertTrue(suffixes.contains(WordSequence.create("def ghi jkl")));
+        assertTrue(suffixes.contains(WordSequence.create("ghi jkl")));
+        assertTrue(suffixes.contains(WordSequence.create("jkl")));
+
+        sequence = WordSequence.create("abc");
+        suffixes = sequence.suffixes();
+        assertEquals(1, suffixes.size());
+        assertTrue(suffixes.contains(WordSequence.create("abc")));
     }
 
     @Test

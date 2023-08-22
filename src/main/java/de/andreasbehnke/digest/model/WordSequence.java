@@ -12,7 +12,7 @@ public class WordSequence {
 
     private final List<String> words;
 
-    private Set<WordSequence> subSequences;
+    private Set<WordSequence> suffixes;
 
     private String stringRepresentation;
 
@@ -45,23 +45,23 @@ public class WordSequence {
     }
 
     /**
-     * @return Set containing all sub-sequences of this sequence. If this sequence is
+     * @return Set containing all suffixes of this sequence. If this sequence is
      * abc def ghi jkl
-     * than the set of all sub-sequences would be
+     * than the set of all suffixes would be
      * abc def ghi jkl
      * def ghi jkl
      * ghi jkl
      * jkl
      */
-    public Set<WordSequence> allSubSequences() {
-        if (subSequences == null) {
+    public Set<WordSequence> suffixes() {
+        if (suffixes == null) {
             Set<WordSequence> sequences = new HashSet<>();
             for(int start = 0; start < words.size(); start++) {
                 sequences.add(subSequence(start, size()));
             }
-            this.subSequences = Collections.unmodifiableSet(sequences);
+            this.suffixes = Collections.unmodifiableSet(sequences);
         }
-        return subSequences;
+        return suffixes;
     }
 
     /**

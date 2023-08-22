@@ -9,10 +9,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-class SubSequenceCollectorTest {
+class SuffixCollectorTest {
 
     @Test
-    void testCollectSubSequences() {
+    void testCollectSuffixes() {
         // The seven example input texts...
         WordSequence sequence1 = WordSequence.create("abc def ghi jkl xyz");
         WordSequence sequence2 = WordSequence.create("abc def ghi xyz 123 456");
@@ -23,7 +23,7 @@ class SubSequenceCollectorTest {
         WordSequence sequence7 = WordSequence.create("888");
 
         //... contain this list of all possible sub-sequences
-        Iterator<WordSequence> subSequences = new SubSequenceCollector().collectSubSequences(List.of(sequence1, sequence2,
+        Iterator<WordSequence> subSequences = new SuffixCollector().collectSuffixes(List.of(sequence1, sequence2,
                 sequence3, sequence4, sequence5, sequence6, sequence7)).iterator();
         assertEquals(WordSequence.create("123 456"), subSequences.next());
         assertEquals(WordSequence.create("123 456 abc ghi def"), subSequences.next());
@@ -58,7 +58,7 @@ class SubSequenceCollectorTest {
     }
 
     @Test
-    void testGroupSequences() {
+    void testGroupSuffixes() {
         // The seven example input texts...
         WordSequence sequence1 = WordSequence.create("abc def ghi jkl xyz");
         WordSequence sequence2 = WordSequence.create("abc def ghi xyz 123 456");
@@ -69,7 +69,7 @@ class SubSequenceCollectorTest {
         WordSequence sequence7 = WordSequence.create("888");
 
         //... contain this list of prefix groups
-        List<WordSequence> groups = new SubSequenceCollector().groupSequences(List.of(sequence1, sequence2,
+        List<WordSequence> groups = new SuffixCollector().groupSuffixes(List.of(sequence1, sequence2,
                 sequence3, sequence4, sequence5, sequence6, sequence7));
         assertEquals(19, groups.size());
 

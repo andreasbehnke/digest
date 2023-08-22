@@ -51,31 +51,31 @@ class WordSequenceTest {
         SequenceMatch match = sequence.match(WordSequence.create("def")).orElseThrow();
         assertEquals(1, match.getFromIndex());
         assertEquals(1, match.getToIndex());
-        assertEquals(1, match.getCount());
+        assertEquals(1, match.length());
         assertEquals("def", match.getPattern().toString());
 
         match = sequence.match(WordSequence.create("def ghi")).orElseThrow();
         assertEquals(1, match.getFromIndex());
         assertEquals(2, match.getToIndex());
-        assertEquals(2, match.getCount());
+        assertEquals(2, match.length());
         assertEquals("def ghi", match.getPattern().toString());
 
         match = sequence.match(WordSequence.create("ghi jkl mno")).orElseThrow();
         assertEquals(2, match.getFromIndex());
         assertEquals(3, match.getToIndex());
-        assertEquals(2, match.getCount());
+        assertEquals(2, match.length());
         assertEquals("ghi jkl", match.getPattern().toString());
 
         match = sequence.match(WordSequence.create("ghi 123")).orElseThrow();
         assertEquals(2, match.getFromIndex());
         assertEquals(2, match.getToIndex());
-        assertEquals(1, match.getCount());
+        assertEquals(1, match.length());
         assertEquals("ghi", match.getPattern().toString());
 
         match = sequence.match(WordSequence.create("ghi 123 456 789")).orElseThrow();
         assertEquals(2, match.getFromIndex());
         assertEquals(2, match.getToIndex());
-        assertEquals(1, match.getCount());
+        assertEquals(1, match.length());
         assertEquals("ghi", match.getPattern().toString());
     }
 
@@ -89,5 +89,42 @@ class WordSequenceTest {
         assertFalse(sequence.startsWith(WordSequence.create("ghi")));
         assertFalse(sequence.startsWith(WordSequence.create("abc def ghi jkl 123")));
         assertFalse(sequence.startsWith(WordSequence.create("999 abc def ghi jkl")));
+    }
+
+    @Test
+    void testMostFrequentCommonMatch() {
+        WordSequence pattern = WordSequence.create("abc def ghi jkl kkk lll");
+
+        SequenceMatch match = pattern.mostFrequentCommonMatch(List.of(WordSequence.create("abc def ghi jkl")), 0, 0).orElseThrow();
+        assertEquals(4, match.length());
+        assertEquals(WordSequence.create("abc def ghi jkl"), match.getPattern());
+        assertEquals(0, match.getFromIndex());
+
+        List<WordSequence> sources = List.of(
+                WordSequence.create("abc def 123 567"),
+                WordSequence.create("abc def 123 567 abc def 123 567"),
+                WordSequence.create("123 456 xyz 777"),
+                WordSequence.create("abc def ghi 777 ttt"),
+                WordSequence.create("abc def ghi jkl"),
+                WordSequence.create("abc def")
+        );
+
+        match = pattern.mostFrequentCommonMatch(sources, 0, 0).orElseThrow();
+        assertEquals(2, match.length());
+        assertEquals(WordSequence.create("abc def"), match.getPattern());
+
+        match = pattern.mostFrequentCommonMatch(sources, 3, 0).orElseThrow();
+        assertEquals(WordSequence.create("abc def ghi"), match.getPattern());
+
+        match = pattern.mostFrequentCommonMatch(sources, 3, 2).orElseThrow();
+        assertEquals(WordSequence.create("abc def ghi"), match.getPattern());
+
+        assertFalse(pattern.mostFrequentCommonMatch(sources, 4, 2).isPresent());
+
+        match = pattern.mostFrequentCommonMatch(sources, 4, 1).orElseThrow();
+        assertEquals(WordSequence.create("abc def ghi jkl"), match.getPattern());
+
+        pattern = WordSequence.create("cba fed ihg lkl");
+        assertFalse(pattern.mostFrequentCommonMatch(sources, 0, 0).isPresent());
     }
 }

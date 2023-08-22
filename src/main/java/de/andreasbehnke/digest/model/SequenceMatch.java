@@ -44,7 +44,7 @@ public class SequenceMatch {
         return toIndex;
     }
 
-    public int getCount() {
+    public int length() {
         return toIndex - fromIndex + 1;
     }
 }

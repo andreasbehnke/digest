@@ -74,9 +74,9 @@ public class WordSequence {
     public Optional<SequenceMatch> match(WordSequence pattern) {
         int fromIndex = -1;
         for (int patternWord = 0; patternWord < pattern.size(); patternWord++) {
-            for (int index = 0; index < size(); index++) {
-                if (words.get(index).equals(pattern.getWords().get(patternWord))) {
-                    fromIndex = index;
+            for (int i = 0; i < size(); i++) {
+                if (words.get(i).equals(pattern.getWords().get(patternWord))) {
+                    fromIndex = i;
                     break;
                 }
             }
@@ -87,15 +87,15 @@ public class WordSequence {
         if (fromIndex == -1) {
             return Optional.empty();
         }
-        int toIndex = fromIndex;
+        int index = 0;
         int searchLength = Math.min(size() - fromIndex, pattern.size());
-        for (int index = 0; index < searchLength; index++) {
-            if (!words.get(index + fromIndex).equals(pattern.getWords().get(index))) {
+        for (int i = 0; i < searchLength; i++) {
+            if (!words.get(i + fromIndex).equals(pattern.getWords().get(i))) {
                 break;
             }
-            toIndex = index + fromIndex;
+            index = i;
         }
-        return Optional.of(new SequenceMatch(pattern.subSequence(0, toIndex - fromIndex + 1), fromIndex, toIndex));
+        return Optional.of(new SequenceMatch(pattern.subSequence(0, index + 1), fromIndex));
     }
 
     /**

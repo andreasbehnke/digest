@@ -102,22 +102,23 @@ public class WordSequence {
      * Using this sequence as pattern, find the most frequent common match in a list of sequences
      * @param sources Search through these sources
      * @param minLength Min match length, shorter matches will be ignored
-     * @param minCount Min number of hits, otherwise return empty
-     * @return Empty, if requirements are not met, or {@link SequenceMatch} for the best fitting match
+     * @param minHits Min number of hits, otherwise return empty
+     * @return Empty, if requirements are not met, or {@link PatternMatches} containing all information about matching
      */
-    public Optional<SequenceMatch> mostFrequentCommonMatch(List<WordSequence> sources, int minLength, int minCount) {
+    public Optional<PatternMatches> mostFrequentCommonMatch(List<WordSequence> sources, int minLength, int minHits) {
         List<SequenceMatch> matches = sources.stream()
                 .map(sequence -> sequence.match(this))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(sequenceMatch -> sequenceMatch.length() >= minLength)
                 .toList();
-        if (matches.size() >= minCount) {
+        int hits = matches.size();
+        if (hits >= minHits) {
             int length = matches.stream()
                     .mapToInt(SequenceMatch::length)
                     .min().orElse(0);
             if (length > 0) {
-                return Optional.of(new SequenceMatch(subSequence(0, length), 0, length - 1));
+                return Optional.of(new PatternMatches(hits, subSequence(0, length)));
             }
         }
         return Optional.empty();

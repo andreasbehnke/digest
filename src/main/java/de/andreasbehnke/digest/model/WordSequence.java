@@ -166,6 +166,11 @@ public class WordSequence {
         return stringRepresentation;
     }
 
+    public String toString(SequenceMatch ellipsis, String ellipsisPattern) {
+        String ellipsisText = ellipsis.getPattern().toString();
+        return toString().replace(ellipsisText, ellipsisPattern);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

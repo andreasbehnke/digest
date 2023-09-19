@@ -137,4 +137,15 @@ class WordSequenceTest {
         pattern = WordSequence.create("cba fed ihg lkl");
         assertFalse(pattern.mostFrequentCommonMatch(sources, 0, 0).isPresent());
     }
+
+    @Test
+    void testToStringWithEllipsis() {
+        WordSequence sequence = WordSequence.create("cba fed ihg lkl");
+        SequenceMatch match = sequence.match(WordSequence.create("fed ihg")).orElseThrow();
+        assertEquals("cba ... lkl", sequence.toString(match, "..."));
+        match = sequence.match(WordSequence.create("ihg lkl")).orElseThrow();
+        assertEquals("cba fed ...", sequence.toString(match, "..."));
+        match = sequence.match(WordSequence.create("cba")).orElseThrow();
+        assertEquals("... fed ihg lkl", sequence.toString(match, "..."));
+    }
 }

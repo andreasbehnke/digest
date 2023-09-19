@@ -2,9 +2,7 @@ package de.andreasbehnke.digest.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,6 +80,9 @@ class WordSequenceTest {
         assertEquals(2, match.getToIndex());
         assertEquals(1, match.length());
         assertEquals("ghi", match.getPattern().toString());
+
+        match = sequence.match(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("abc def"), WordSequence.create("ghi 123 456 789"))).orElseThrow();
+        assertEquals("abc def", match.getPattern().toString());
     }
 
     @Test

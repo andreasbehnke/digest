@@ -99,6 +99,23 @@ public class WordSequence {
     }
 
     /**
+     * For each pattern in patterns searches the given pattern and if part of the pattern
+     * is found in this sequence, returns a {@link SequenceMatch} containing from index and
+     * to index of pattern within this sequence and the sub pattern found.
+     * @param patterns The patterns to search for
+     * @return match found or empty
+     */
+    public Optional<SequenceMatch> match(List<WordSequence> patterns) {
+        for (WordSequence pattern: patterns) {
+            Optional<SequenceMatch> match = match(pattern);
+            if (match.isPresent()) {
+                return match;
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Using this sequence as pattern, find the most frequent common match in a list of sequences
      * @param sources Search through these sources
      * @param minLength Min match length, shorter matches will be ignored

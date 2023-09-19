@@ -67,7 +67,8 @@ public class WordSequence {
     /**
      * Searches the given pattern and if part of the pattern is found in this sequence,
      * returns a {@link SequenceMatch} containing from index and to index of pattern
-     * within this sequence and the sub pattern found.
+     * within this sequence and the sub pattern found. If you want to have an exact match,
+     * use method contains.
      * @param pattern The pattern to search for
      * @return match found or empty
      */
@@ -101,13 +102,61 @@ public class WordSequence {
     /**
      * For each pattern in patterns searches the given pattern and if part of the pattern
      * is found in this sequence, returns a {@link SequenceMatch} containing from index and
-     * to index of pattern within this sequence and the sub pattern found.
+     * to index of pattern within this sequence and the sub pattern found. If you want to have
+     * an exact match, use method contains.
      * @param patterns The patterns to search for
      * @return match found or empty
      */
     public Optional<SequenceMatch> match(List<WordSequence> patterns) {
         for (WordSequence pattern: patterns) {
             Optional<SequenceMatch> match = match(pattern);
+            if (match.isPresent()) {
+                return match;
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Searches the given pattern and if complete pattern is found in this sequence,
+     * returns a {@link SequenceMatch} containing from index and to index of pattern
+     * within this sequence.
+     * @param pattern The pattern to search for
+     * @return match found or empty
+     */
+    public Optional<SequenceMatch> contains(WordSequence pattern) {
+        int start = -1;
+        String firstWord = pattern.getWords().get(0);
+        for (int i = 0; i < words.size(); i++) {
+            if (words.get(i).equals(firstWord)) {
+                start = i;
+                break;
+            }
+        }
+        if (start > -1) {
+            if (start + pattern.size() > words.size()) {
+                return Optional.empty();
+            }
+            for (int i = 0; i < pattern.size(); i++) {
+                if (!pattern.getWords().get(i).equals(words.get(i + start))) {
+                    return Optional.empty();
+                }
+            }
+            return Optional.of(new SequenceMatch(pattern, start));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * For each pattern in patterns searches the given pattern and if complete pattern is found in this sequence,
+     * returns a {@link SequenceMatch} containing from index and to index of pattern
+     * within this sequence.
+     * @param patterns The patterns to search for
+     * @return match found or empty
+     */
+    public Optional<SequenceMatch> contains(List<WordSequence> patterns) {
+        for (WordSequence pattern: patterns) {
+            Optional<SequenceMatch> match = contains(pattern);
             if (match.isPresent()) {
                 return match;
             }

@@ -139,6 +139,32 @@ class WordSequenceTest {
     }
 
     @Test
+    void testContains() {
+        WordSequence pattern = WordSequence.create("abc def ghi jkl kkk lll");
+        SequenceMatch match = pattern.contains(WordSequence.create("abc def")).orElseThrow();
+        assertEquals("abc def", match.getPattern().toString());
+        assertEquals(0, match.getFromIndex());
+        assertFalse(pattern.contains(WordSequence.create("abc def ghi jkl kkk lll xxx")).isPresent());
+        match = pattern.contains(WordSequence.create("abc def ghi jkl kkk lll")).orElseThrow();
+        assertEquals("abc def ghi jkl kkk lll", match.getPattern().toString());
+        assertEquals(0, match.getFromIndex());
+        match = pattern.contains(WordSequence.create("ghi jkl kkk lll")).orElseThrow();
+        assertEquals("ghi jkl kkk lll", match.getPattern().toString());
+        assertEquals(2, match.getFromIndex());
+        match = pattern.contains(WordSequence.create("ghi jkl")).orElseThrow();
+        assertEquals("ghi jkl", match.getPattern().toString());
+        assertEquals(2, match.getFromIndex());
+        match = pattern.contains(WordSequence.create("jkl")).orElseThrow();
+        assertEquals("jkl", match.getPattern().toString());
+        assertEquals(3, match.getFromIndex());
+
+        match = pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("abc def"), WordSequence.create("ghi 123 456 789"))).orElseThrow();
+        assertEquals("abc def", match.getPattern().toString());
+
+        assertFalse(pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("ghi 123 456 789"))).isPresent());
+    }
+
+    @Test
     void testToStringWithEllipsis() {
         WordSequence sequence = WordSequence.create("cba fed ihg lkl");
         SequenceMatch match = sequence.match(WordSequence.create("fed ihg")).orElseThrow();

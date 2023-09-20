@@ -3,6 +3,7 @@ package de.andreasbehnke.digest.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -158,10 +159,17 @@ class WordSequenceTest {
         assertEquals("jkl", match.getPattern().toString());
         assertEquals(3, match.getFromIndex());
 
-        match = pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("abc def"), WordSequence.create("ghi 123 456 789"))).orElseThrow();
-        assertEquals("abc def", match.getPattern().toString());
+        Set<SequenceMatch> matches = pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("abc def"), WordSequence.create("ghi 123 456 789")));
+        assertEquals(1, matches.size());
+        assertEquals("abc def", matches.iterator().next().getPattern().toString());
 
-        assertFalse(pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("ghi 123 456 789"))).isPresent());
+        assertEquals(0, pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("ghi 123 456 789"))).size());
+
+        matches = pattern.contains(Arrays.asList(WordSequence.create("x y z"), WordSequence.create("abc def"), WordSequence.create("def ghi")));
+        assertEquals(2, matches.size());
+        Set<String> matchesAsString = matches.stream().map(m -> m.getPattern().toString()).collect(Collectors.toSet());
+        assertTrue(matchesAsString.contains("abc def"));
+        assertTrue(matchesAsString.contains("def ghi"));
     }
 
     @Test

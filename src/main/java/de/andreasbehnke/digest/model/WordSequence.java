@@ -148,20 +148,17 @@ public class WordSequence {
     }
 
     /**
-     * For each pattern in patterns searches the given pattern and if complete pattern is found in this sequence,
-     * returns a {@link SequenceMatch} containing from index and to index of pattern
-     * within this sequence.
+     * For each pattern in patterns searches the given pattern and if complete pattern
+     * is found in this sequence, pattern is added to the set returned.
      * @param patterns The patterns to search for
-     * @return match found or empty
+     * @return matches found or empty set
      */
-    public Optional<SequenceMatch> contains(List<WordSequence> patterns) {
-        for (WordSequence pattern: patterns) {
-            Optional<SequenceMatch> match = contains(pattern);
-            if (match.isPresent()) {
-                return match;
-            }
-        }
-        return Optional.empty();
+    public Set<SequenceMatch> contains(List<WordSequence> patterns) {
+        return patterns.stream()
+                .map(this::contains)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 
     /**

@@ -212,9 +212,33 @@ public class WordSequence {
         return stringRepresentation;
     }
 
-    public String toString(SequenceMatch ellipsis, String ellipsisPattern) {
-        String ellipsisText = ellipsis.getPattern().toString();
-        return toString().replace(ellipsisText, ellipsisPattern);
+    public String toString(Set<Integer> ellipsis, String ellipsisPattern) {
+        StringBuilder output = new StringBuilder();
+        boolean ellipsisRendered = false;
+        boolean isFirst = true;
+        for (int i = 0; i < words.size(); i++) {
+            boolean isEllipsis = ellipsis.contains(i);
+            if (isEllipsis) {
+                if (!ellipsisRendered) {
+                    if (isFirst) {
+                        isFirst = false;
+                        output.append(ellipsisPattern);
+                    } else {
+                        output.append(" ").append(ellipsisPattern);
+                    }
+                    ellipsisRendered = true;
+                }
+            } else {
+                ellipsisRendered = false;
+                if (isFirst) {
+                    isFirst = false;
+                    output.append(words.get(i));
+                } else {
+                    output.append(" ").append(words.get(i));
+                }
+            }
+        }
+        return output.toString();
     }
 
     @Override

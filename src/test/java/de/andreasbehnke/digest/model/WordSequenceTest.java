@@ -174,12 +174,10 @@ class WordSequenceTest {
 
     @Test
     void testToStringWithEllipsis() {
-        WordSequence sequence = WordSequence.create("cba fed ihg lkl");
-        SequenceMatch match = sequence.match(WordSequence.create("fed ihg")).orElseThrow();
-        assertEquals("cba ... lkl", sequence.toString(match, "..."));
-        match = sequence.match(WordSequence.create("ihg lkl")).orElseThrow();
-        assertEquals("cba fed ...", sequence.toString(match, "..."));
-        match = sequence.match(WordSequence.create("cba")).orElseThrow();
-        assertEquals("... fed ihg lkl", sequence.toString(match, "..."));
+        WordSequence sequence = WordSequence.create("cba fed ihg lkl xyz");
+        assertEquals("cba ... ihg ...", sequence.toString(Set.of(1, 3, 4), "..."));
+        assertEquals("... fed ihg lkl xyz", sequence.toString(Set.of(0), "..."));
+        assertEquals("...", sequence.toString(Set.of(0,1,2,3,4), "..."));
+        assertEquals("cba fed --- lkl xyz", sequence.toString(Set.of(2), "---"));
     }
 }
